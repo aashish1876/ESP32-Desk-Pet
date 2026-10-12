@@ -10,8 +10,8 @@
 #include <time.h>
 
 // Configure these privately before building.
-const char* WIFI_SSID = "Aashish_5G";
-const char* WIFI_PASSWORD = "Aashish@1318";
+const char* WIFI_SSID = "Airtel_matt_5165";
+const char* WIFI_PASSWORD = "Air@88073";
 const char* WEATHER_KEY = "bd5e378503939ddaee76f12ad7a97608";
 
 const char* CITY = "Kunchanapalli";
