@@ -1,0 +1,50 @@
+
+name: Build ESP32 Desk Pet
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "DeskPet/**"
+      - ".github/workflows/build.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Configure Arduino CLI
+        run: arduino-cli config init
+
+      - name: Install ESP32 platform
+        run: |
+          arduino-cli core update-index \
+            --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32 \
+            --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+
+      - name: Install required libraries
+        run: |
+          arduino-cli lib install "LiquidCrystal I2C"
+          arduino-cli lib install "ESP32Servo"
+          arduino-cli lib install "ArduinoJson"
+
+      - name: Compile Desk Pet
+        run: |
+          arduino-cli compile \
+            --fqbn esp32:esp32:esp32 \
+            --output-dir firmware \
+            DeskPet
+
+      - name: Upload firmware files
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESP32-Desk-Pet-firmware
+          path: firmware/*.bin
+          if-no-files-found: error
